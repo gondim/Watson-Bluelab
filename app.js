@@ -20,6 +20,7 @@ var express  = require('express'),
   app        = express(),
   fs         = require('fs'),
   path       = require('path'),
+  vcapServices = require('vcap_services'),
   bluemix    = require('./config/bluemix'),
   extend     = require('util')._extend,
   watson     = require('watson-developer-cloud');
@@ -27,14 +28,21 @@ var express  = require('express'),
 // Bootstrap application settings
 require('./config/express')(app);
 
-// if bluemix credentials exists, then override local
-var credentials =  extend({
-  url: '<url>',
-  username: '<username>',
-  password: '<password>',
+var credentialsDialog =  extend({
+  url: 'https://gateway.watsonplatform.net/dialog/api',
+  username: '8e81235a-a093-4212-8ea4-9f63be724865',
+  password: 'sUCRjbgnw0r6',
   version: 'v1'
 }, bluemix.getServiceCreds('dialog')); // VCAP_SERVICES
 
+/*
+var config = extend({
+  version: 'v1',
+  url: 'https://stream.watsonplatform.net/speech-to-text/api',
+  username: process.env.STT_USERNAME || '8b9cda7d-18e1-46a8-8129-988391d59a77',
+  password: process.env.STT_PASSWORD || '8es9PgTTLMqH'
+}, vcapServices.getCredentials('speech_to_text'));
+*/
 
 var dialog_id_in_json = (function() {
   try {
@@ -49,7 +57,7 @@ var dialog_id_in_json = (function() {
 var dialog_id = process.env.DIALOG_ID || dialog_id_in_json || '<missing-dialog-id>';
 
 // Create the service wrapper
-var dialog = watson.dialog(credentials);
+var dialog = watson.dialog(credentialsDialog);
 
 app.post('/conversation', function(req, res, next) {
   var params = extend({ dialog_id: dialog_id }, req.body);
