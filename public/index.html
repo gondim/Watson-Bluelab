@@ -108,7 +108,15 @@
 					</div>
 				</div>
 
-				<input type="text" placeholder="Type a response and hit enter" value="" autocomplete="off" class="chat-window--message-input base--text-input">
+				<div class="response-box">
+					<div class="response-box--input-text">
+						<input type="text" placeholder="Type a response and hit enter" value="" autocomplete="off" class="chat-window--message-input base--text-input">	
+					</div>
+					<li id="recordButton" class="response-box--record-button recordButton">
+            			<img id="microphoneIcon" src="images/icons/microphone.svg" class="icon">
+            		</li>
+				</div>
+				
 			</div>
 		</div>
 
@@ -149,6 +157,8 @@
 
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script type="text/javascript" src="js/recordButton.js"></script>
   	<script type="text/javascript" src="js/demo.js"></script>
+
 </body>
 </html>

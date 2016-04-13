@@ -26,8 +26,8 @@ $(document).ready(function () {
     $jsonPanel = $('#json-panel .base--textarea'),
     $information = $('.data--information'),
     $profile = $('.data--profile'),
-    $loading = $('.loader');
-
+    $loading = $('.loader'),
+    recordbutton = ('./recordButton');
 
   $chatInput.keyup(function(event){
     if(event.keyCode === 13) {

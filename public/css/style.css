@@ -1066,10 +1066,6 @@ pre[class*=" language-"] {
 
 .chat-window {
   position: relative; }
-  .chat-window--message-input {
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem; }
-
 .chat-box {
   position: relative;
   height: 20rem; }
@@ -1128,6 +1124,26 @@ pre[class*=" language-"] {
     width: 100%; }
   .chat-box--item_YOU .chat-box--message-text {
     padding: 0.65rem 0rem; }
+
+.response-box {
+  height: 68px;
+}
+  .response-box--input-text {
+    padding-right: 0px;
+    float: left;
+    width: 85%;
+  }
+    .chat-window--message-input {
+      padding-top: 1.5rem;
+      padding-bottom: 1.5rem; }
+  .response-box--record-button {
+    height: 100%;
+    width: 15%;
+    margin-left: 0px;
+    margin-top: 0px;
+    background-color: #325c80;
+    display: inline-block;
+    float: right; }
 
 .radio-group--label {
   display: block;
