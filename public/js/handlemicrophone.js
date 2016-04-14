@@ -16,8 +16,8 @@
 /* global $ */
 'use strict';
 
-var initSocket = require('./socket').initSocket;
-var display = require('./views/displaymetadata');
+var initSocket = require(['./js/socket']).initSocket;
+//var display = require('./views/displaymetadata');
 
 exports.handleMicrophone = function(token, model, mic, callback) {
 

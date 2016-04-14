@@ -16,9 +16,9 @@
 /* global $ */
 'use strict';
 
-var Microphone = require('./Microphone');
-var handleMicrophone = require('./handlemicrophone').handleMicrophone;
-var showError = require('./showerror').showError;
+var Microphone = require(['./js/Microphone']);
+var handleMicrophone = require(['./js/handlemicrophone']).handleMicrophone;
+//var showError = require(['./js/showerror']).showError;
 
 exports.initRecordButton = function(ctx) {
 

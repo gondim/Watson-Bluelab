@@ -16,7 +16,7 @@
 /* global OfflineAudioContext */
 'use strict';
 
-var utils = require('./utils');
+var utils = require(['./js/utils']);
 /**
  * Captures microphone input from the browser.
  * Works at least on latest versions of Firefox and Chrome
