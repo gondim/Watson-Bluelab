@@ -27,14 +27,21 @@ $(document).ready(function () {
     $information = $('.data--information'),
     $profile = $('.data--profile'),
     $loading = $('.loader'),
-    recordbutton = ('./recordButton');
+    $recordButton = $('.recordButton');
+
+
+  
+  $recordButton.click(function(event){
+
+    
+  });
 
   $chatInput.keyup(function(event){
     if(event.keyCode === 13) {
       converse($(this).val());
     }
   });
-
+ 
   var converse = function(userText) {
     $loading.show();
     // $chatInput.hide();

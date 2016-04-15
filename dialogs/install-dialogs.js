@@ -172,4 +172,9 @@ function updateDialogFiles(credentials) {
 }
 
 
-updateDialogFiles(bluemix.getServiceCreds('dialog'));
+updateDialogFiles({
+    url: 'https://gateway.watsonplatform.net/dialog/api',
+    username: '8e81235a-a093-4212-8ea4-9f63be724865',
+    password: 'sUCRjbgnw0r6',
+    version: 'v1'
+});
