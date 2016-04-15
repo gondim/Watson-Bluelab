@@ -35,14 +35,12 @@ var credentialsDialog =  extend({
   version: 'v1'
 }, bluemix.getServiceCreds('dialog')); // VCAP_SERVICES
 
-/*
-var config = extend({
+var credentialsSpeechToText = extend({
   version: 'v1',
   url: 'https://stream.watsonplatform.net/speech-to-text/api',
   username: process.env.STT_USERNAME || '8b9cda7d-18e1-46a8-8129-988391d59a77',
   password: process.env.STT_PASSWORD || '8es9PgTTLMqH'
 }, vcapServices.getCredentials('speech_to_text'));
-*/
 
 var dialog_id_in_json = (function() {
   try {
@@ -52,7 +50,6 @@ var dialog_id_in_json = (function() {
   } catch (e) {
   }
 })();
-
 
 var dialog_id = process.env.DIALOG_ID || dialog_id_in_json || '<missing-dialog-id>';
 
@@ -78,6 +75,13 @@ app.post('/profile', function(req, res, next) {
       res.json(results);
   });
 });
+
+var speech_to_text = watson.speech_to_text(credentialsSpeechToText);
+
+app.post('/audio', function(req, res, next) {
+
+});
+
 
 // error-handler settings
 require('./config/error-handler')(app);
