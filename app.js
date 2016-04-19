@@ -78,13 +78,20 @@ app.post('/profile', function(req, res, next) {
 
 var speech_to_text = watson.speech_to_text(credentialsSpeechToText);
 
-app.post('/audio', function(req, res, next) {
-
+//para sabe se pega algum token e nao buga
+app.post('/api/token', function(req, res, next) {
+  authService.getToken({url: config.url}, function(err, token) {
+    if (err)
+      next(err);
+    else
+      res.send(token);
+  });
 });
 
 
 // error-handler settings
 require('./config/error-handler')(app);
+module.exports = app;
 
 var port = process.env.VCAP_APP_PORT || 3000;
 app.listen(port);

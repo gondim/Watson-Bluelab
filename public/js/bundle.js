@@ -9865,6 +9865,8 @@ return jQuery;
 
 // conversation variables
 var conversation_id, client_id;
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
 
 $(document).ready(function () {
   var $chatInput = $('.chat-window--message-input'),
@@ -9879,6 +9881,8 @@ $(document).ready(function () {
     var Microphone = require('./test/Microphone');
     var handleMicrophone = require('./test/handlemicrophone').handleMicrophone;
     var showError = require('./test/showerror').showError;
+
+    console.log('chegou aki');
 
     var running = false;
     var token = ctx.token;
@@ -11726,11 +11730,15 @@ exports.getKeywordsToSearch = function() {
   return keywords_to_search;
 };
 
-$.subscribe('clearscreen', function() {
-  clearScene();
-  clearDetectedKeywords();
-  resetWorker();
-});
+
+//ta dando um erro que eu nao sei o que é
+
+
+//$.subscribe('clearscreen', function() {
+  //clearScene();
+  //clearDetectedKeywords();
+  //resetWorker();
+//});
 
 $(window).resize(function() {
   onResize();
