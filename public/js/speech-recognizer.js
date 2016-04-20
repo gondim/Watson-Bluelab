@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 IBM Corp. All Rights Reserved.
+ * Copyright 2014 IBM Corp. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* global OfflineAudioContext */
+
 'use strict';
 
-var utils = require('./utils');
 /**
  * Captures microphone input from the browser.
  * Works at least on latest versions of Firefox and Chrome
@@ -26,7 +25,7 @@ function Microphone(_options) {
 
   // we record in mono because the speech recognition service
   // does not support stereo.
-  this.bufferSize = options.bufferSize || 8192;
+  this.bufferSize = options.bufferSize || 2048;
   this.inputChannels = options.inputChannels || 1;
   this.outputChannels = options.outputChannels || 1;
   this.recording = false;
@@ -34,8 +33,6 @@ function Microphone(_options) {
   this.sampleRate = 16000;
   // auxiliar buffer to keep unused samples (used when doing downsampling)
   this.bufferUnusedSamples = new Float32Array(0);
-  this.samplesAll = new Float32Array(20000000);
-  this.samplesAllOffset = 0;
 
   // Chrome or Firefox or IE User media
   if (!navigator.getUserMedia) {
@@ -64,7 +61,7 @@ Microphone.prototype.onError = function(error) {
  * @param  {Object} stream The Stream to connect to
  *
  */
-Microphone.prototype.onMediaStream = function(stream) {
+Microphone.prototype.onMediaStream =  function(stream) {
   var AudioCtx = window.AudioContext || window.webkitAudioContext;
 
   if (!AudioCtx)
@@ -78,13 +75,11 @@ Microphone.prototype.onMediaStream = function(stream) {
 
   audioInput.connect(gain);
 
-  if (!this.mic) {
-    this.mic = this.audioContext.createScriptProcessor(this.bufferSize,
+  this.mic = this.audioContext.createScriptProcessor(this.bufferSize,
     this.inputChannels, this.outputChannels);
-  }
 
   // uncomment the following line if you want to use your microphone sample rate
-  // this.sampleRate = this.audioContext.sampleRate;
+  //this.sampleRate = this.audioContext.sampleRate;
   console.log('Microphone.onMediaStream(): sampling rate is:', this.sampleRate);
 
   this.mic.onaudioprocess = this._onaudioprocess.bind(this);
@@ -108,17 +103,15 @@ Microphone.prototype._onaudioprocess = function(data) {
     return;
   }
 
-  // Single channel
+  // Check the data to see if we're just getting 0s
+  // (the user isn't saying anything)
   var chan = data.inputBuffer.getChannelData(0);
 
-  // resampler(this.audioContext.sampleRate,data.inputBuffer,this.onAudio);
-
-  this.saveData(new Float32Array(chan));
   this.onAudio(this._exportDataBufferTo16Khz(new Float32Array(chan)));
 
-  // export with microphone mhz, remember to update the this.sampleRate
+  //export with microphone mhz, remember to update the this.sampleRate
   // with the sample rate from your microphone
-  // this.onAudio(this._exportDataBuffer(new Float32Array(chan)));
+  //this.onAudio(this._exportDataBuffer(new Float32Array(chan)));
 
 };
 
@@ -135,7 +128,7 @@ Microphone.prototype.record = function() {
   }
 
   this.requestedAccess = true;
-  navigator.getUserMedia({audio: true},
+  navigator.getUserMedia({ audio: true },
     this.onMediaStream.bind(this), // Microphone permission granted
     this.onPermissionRejected.bind(this)); // Microphone permission rejected
 };
@@ -146,12 +139,11 @@ Microphone.prototype.record = function() {
 Microphone.prototype.stop = function() {
   if (!this.recording)
     return;
-  if (JSON.parse(localStorage.getItem('playback')))
-    this.playWav(); /* plays back the audio that was recorded*/
   this.recording = false;
-  this.stream.getTracks()[0].stop();
+  this.stream.stop();
   this.requestedAccess = false;
   this.mic.disconnect(0);
+  this.mic = null;
   this.onStopRecording();
 };
 
@@ -170,7 +162,6 @@ Microphone.prototype._exportDataBufferTo16Khz = function(bufferNewSamples) {
   var buffer = null,
     newSamples = bufferNewSamples.length,
     unusedSamples = this.bufferUnusedSamples.length;
-
 
   if (unusedSamples > 0) {
     buffer = new Float32Array(unusedSamples + newSamples);
@@ -195,10 +186,9 @@ Microphone.prototype._exportDataBufferTo16Khz = function(bufferNewSamples) {
     pcmEncodedBuffer16k = new ArrayBuffer(nOutputSamples * 2),
     dataView16k = new DataView(pcmEncodedBuffer16k),
     index = 0,
-    volume = 0x7FFF, // range from 0 to 0x7FFF to control the volume
+    volume = 0x7FFF, //range from 0 to 0x7FFF to control the volume
     nOut = 0;
 
-  // eslint-disable-next-line no-redeclare
   for (var i = 0; i + filter.length - 1 < buffer.length; i = Math.round(samplingRateRatio * nOut)) {
     var sample = 0;
     for (var j = 0; j < filter.length; ++j) {
@@ -224,151 +214,168 @@ Microphone.prototype._exportDataBufferTo16Khz = function(bufferNewSamples) {
   return new Blob([dataView16k], {
     type: 'audio/l16'
   });
-};
-
-
-
-// // native way of resampling captured audio
-// var resampler = function(sampleRate, audioBuffer, callbackProcessAudio) {
-//
-//   console.log('length: ' + audioBuffer.length + ' ' + sampleRate);
-//   var channels = 1;
-//   var targetSampleRate = 16000;
-//   var numSamplesTarget = audioBuffer.length * targetSampleRate / sampleRate;
-//
-//   var offlineContext = new OfflineAudioContext(channels, numSamplesTarget, targetSampleRate);
-//   var bufferSource = offlineContext.createBufferSource();
-//   bufferSource.buffer = audioBuffer;
-//
-//   // callback that is called when the resampling finishes
-//   offlineContext.oncomplete = function(event) {
-//     var samplesTarget = event.renderedBuffer.getChannelData(0);
-//     console.log('Done resampling: ' + samplesTarget.length + ' samples produced');
-//
-//   // convert from [-1,1] range of floating point numbers to [-32767,32767] range of integers
-//     var index = 0;
-//     var volume = 0x7FFF;
-//     var pcmEncodedBuffer = new ArrayBuffer(samplesTarget.length * 2);    // short integer to byte
-//     var dataView = new DataView(pcmEncodedBuffer);
-//     for (var i = 0; i < samplesTarget.length; i++) {
-//       dataView.setInt16(index, samplesTarget[i] * volume, true);
-//       index += 2;
-//     }
-//
-//     // l16 is the MIME type for 16-bit PCM
-//     callbackProcessAudio(new Blob([dataView], {type: 'audio/l16'}));
-//   };
-//
-//   bufferSource.connect(offlineContext.destination);
-//   bufferSource.start(0);
-//   offlineContext.startRendering();
-// };
-
-
+  };
 
 /**
  * Creates a Blob type: 'audio/l16' with the
  * chunk coming from the microphone.
  */
-// var exportDataBuffer = function(buffer, bufferSize) {
-//   var pcmEncodedBuffer = null,
-//     dataView = null,
-//     index = 0,
-//     volume = 0x7FFF; // range from 0 to 0x7FFF to control the volume
-//
-//   pcmEncodedBuffer = new ArrayBuffer(bufferSize * 2);
-//   dataView = new DataView(pcmEncodedBuffer);
-//
-//   /* Explanation for the math: The raw values captured from the Web Audio API are
-//    * in 32-bit Floating Point, between -1 and 1 (per the specification).
-//    * The values for 16-bit PCM range between -32768 and +32767 (16-bit signed integer).
-//    * Multiply to control the volume of the output. We store in little endian.
-//    */
-//   for (var i = 0; i < buffer.length; i++) {
-//     dataView.setInt16(index, buffer[i] * volume, true);
-//     index += 2;
-//   }
-//
-//   // l16 is the MIME type for 16-bit PCM
-//   return new Blob([dataView], {type: 'audio/l16'});
-// };
+Microphone.prototype._exportDataBuffer = function(buffer) {
+  var pcmEncodedBuffer = null,
+    dataView = null,
+    index = 0,
+    volume = 0x7FFF; //range from 0 to 0x7FFF to control the volume
 
-Microphone.prototype._exportDataBuffer = function(buffer){
-  utils.exportDataBuffer(buffer, this.bufferSize);
+  pcmEncodedBuffer = new ArrayBuffer(this.bufferSize * 2);
+  dataView = new DataView(pcmEncodedBuffer);
+
+  /* Explanation for the math: The raw values captured from the Web Audio API are
+   * in 32-bit Floating Point, between -1 and 1 (per the specification).
+   * The values for 16-bit PCM range between -32768 and +32767 (16-bit signed integer).
+   * Multiply to control the volume of the output. We store in little endian.
+   */
+  for (var i = 0; i < buffer.length; i++) {
+    dataView.setInt16(index, buffer[i] * volume, true);
+    index += 2;
+  }
+
+  // l16 is the MIME type for 16-bit PCM
+  return new Blob([dataView], { type: 'audio/l16' });
 };
-
 
 // Functions used to control Microphone events listeners.
-Microphone.prototype.onStartRecording = function() {};
-Microphone.prototype.onStopRecording = function() {};
-Microphone.prototype.onAudio = function() {};
+Microphone.prototype.onStartRecording =  function() {};
+Microphone.prototype.onStopRecording =  function() {};
+Microphone.prototype.onAudio =  function() {};
 
-module.exports = Microphone;
+/**
+ *  @author Daniel Bolanos <dbolano@us.ibm.com>
+ *  modified by German Attanasio <germanatt@us.ibm.com>
+ *
+ * @param {Object} _options configuration parameters
+ * @param {String} _options.ws  WebSocket URL
+ * @param {Microphone} _options.mic The Michrophone
+ *
+ */
+function SpeechRecognizer(_options) {
+  var options = _options || {};
 
-Microphone.prototype.saveData = function(samples) {
-  for (var i = 0; i < samples.length; ++i) {
-    this.samplesAll[this.samplesAllOffset + i] = samples[i];
+  this.mic = options.mic || new Microphone(_options);
+  this.ws = options.ws || '';
+  this.sessions = [];
+
+  var self = this;
+
+  this.mic.onAudio = function(data) {
+    //console.log('onAudio():',data);
+    if (self.socket.connected)
+      self.socket.emit('message', {audio: data, rate: self.mic.sampleRate});
+  };
+
+  this.mic.onError = function(error) {
+    self.onerror(error);
+  };
+
+  this.mic.onStartRecording = function() {
+    self._init();
+  };
+
+  this.mic.onStopRecording = function() {
+    console.log('mic.onStopRecording()');
+    self.socket.emit('message', {disconnect:true});
+  };
+}
+
+/**
+ * Create a Websocket and listen for server data
+ */
+SpeechRecognizer.prototype._init = function() {
+  // If sockets exits then connect to it
+  // otherwise create a new socket
+  if (this.socket){
+    this.socket.connect();
+    return;
   }
-  this.samplesAllOffset += samples.length;
-  console.log('samples: ' + this.samplesAllOffset);
+
+  console.log('SpeechRecognizer._init():', this.ws);
+  var self = this;
+  this.socket = io.connect(this.ws);
+
+  this.socket.on('connect', function() {
+    console.log('socket.onconnect()');
+    self.connected = true;
+    self.onstart();
+  });
+
+  this.socket.on('disconnect', function() {
+    console.log('socket.ondisconnect()');
+    self.onend();
+  });
+
+  this.socket.on('session', function(session) {
+    console.log('session:',session);
+    self.sessions.push(session);
+    self.session_id = session;
+  });
+
+  this.socket.on('connect_failed', function() {
+    console.log('socket.connect_failed()');
+    self.onerror('WebSocket can not be contacted');
+  });
+
+  var onError = function(error) {
+    var errorStr = error ? error : 'A unknown error occurred';
+    console.log('socket.onerror()', errorStr);
+    self.onerror(errorStr);
+  };
+
+  this.socket.on('error', onError);
+  this.socket.on('onerror', onError);
+
+  this.socket.on('message', function(msg){
+    //console.log('socket.onmessage():', msg);
+    self.onresult(msg);
+  });
+
 };
 
-Microphone.prototype.playWav = function() {
-  var samples = this.samplesAll.subarray(0, this.samplesAllOffset);
-  var dataview = this.encodeWav(samples, 1, this.audioContext.sampleRate);
-  var audioBlob = new Blob([dataview], {type: 'audio/l16'});
-  var url = window.URL.createObjectURL(audioBlob);
-  var audio = new Audio();
-  audio.src = url;
-  audio.play();
-};
-
-Microphone.prototype.encodeWav = function(samples, numChannels, sampleRate) {
-  console.log('#samples: ' + samples.length);
-  var buffer = new ArrayBuffer(44 + samples.length * 2);
-  var view = new DataView(buffer);
-
-  /* RIFF identifier */
-  this.writeString(view, 0, 'RIFF');
-  /* RIFF chunk length */
-  view.setUint32(4, 36 + samples.length * 2, true);
-  /* RIFF type */
-  this.writeString(view, 8, 'WAVE');
-  /* format chunk identifier */
-  this.writeString(view, 12, 'fmt ');
-  /* format chunk length */
-  view.setUint32(16, 16, true);
-  /* sample format (raw) */
-  view.setUint16(20, 1, true);
-  /* channel count */
-  view.setUint16(22, numChannels, true);
-  /* sample rate */
-  view.setUint32(24, sampleRate, true);
-  /* byte rate (sample rate * block align) */
-  view.setUint32(28, sampleRate * 4, true);
-  /* block align (channel count * bytes per sample) */
-  view.setUint16(32, numChannels * 2, true);
-  /* bits per sample */
-  view.setUint16(34, 16, true);
-  /* data chunk identifier */
-  this.writeString(view, 36, 'data');
-  /* data chunk length */
-  view.setUint32(40, samples.length * 2, true);
-
-  this.floatTo16BitPCM(view, 44, samples);
-
-  return view;
-};
-
-Microphone.prototype.writeString = function(view, offset, string){
-  for (var i = 0; i < string.length; i++){
-    view.setUint8(offset + i, string.charCodeAt(i));
+/**
+ * The stop method represents an instruction to the
+ * recognition service to start listening
+ */
+SpeechRecognizer.prototype.start = function() {
+  try {
+    this.mic.record();
+  } catch (e) {
+    this.onerror(e);
+    return;
   }
 };
 
-Microphone.prototype.floatTo16BitPCM = function(output, offset, input){
-  for (var i = 0; i < input.length; i++, offset += 2){
-    var s = Math.max(-1, Math.min(1, input[i]));
-    output.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+/**
+ * The stop method represents an instruction to the
+ * recognition service to stop listening to more audio
+ */
+SpeechRecognizer.prototype.stop = function() {
+  try {
+    this.mic.stop();
+  } catch (e) {
+    this.onerror(e);
+    return;
   }
 };
+
+/**
+ * The abort method is a request to immediately stop
+ * listening and stop recognizing and do not return
+ * any information but that the system is done.
+ */
+SpeechRecognizer.prototype.abort = function() {
+  this.stop();
+};
+
+// Functions used for speech recognition events listeners.
+SpeechRecognizer.prototype.onstart = function() {};
+SpeechRecognizer.prototype.onresult = function() {};
+SpeechRecognizer.prototype.onerror = function() {};
+SpeechRecognizer.prototype.onend = function() {};

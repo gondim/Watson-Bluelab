@@ -32,7 +32,26 @@ $(document).ready(function () {
     $recordButton = $('.recordButton');
   
   $recordButton.click(function(event){
+    switch (speechState) {
+      case 'listening':
+        speech.recognizeAbort();
+        setButtonState('default');
+        break;
+      case 'speaking':
+        speech.stop();
+        $('.play').removeClass('playing');
+        setButtonState('default');
+        break;
+      default:
+        speech.recognize();
+        setButtonState('listening');
+        $('#listen').blur();
+        break;
+    }
 
+<<<<<<< HEAD
+    return false;
+=======
     var Microphone = require('./test/Microphone');
     var handleMicrophone = require('./test/handlemicrophone').handleMicrophone;
     var showError = require('./test/showerror').showError;
@@ -84,7 +103,30 @@ $(document).ready(function () {
         localStorage.setItem('currentlyDisplaying', 'false');
       }
     };
+>>>>>>> a0dc58405739db2e34f98df99f6a2e4a93634c6c
   });
+
+  var speechState = '';
+
+  function setButtonState(state) {
+  console.log(state);
+  var button = $('#listen');
+  speechState = state;
+
+  button.removeClass('listen').removeClass('stop').removeClass('playing');
+
+  switch (state) {
+    case 'listening':
+      button.addClass('stop');
+      break;
+    case 'speaking':
+      button.addClass('playing');
+      break;
+    default:
+      button.addClass('listen');
+      break;
+    }
+  }
 
   $chatInput.keyup(function(event){
     if(event.keyCode === 13) {
