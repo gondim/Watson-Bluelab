@@ -20,8 +20,6 @@
 
 // conversation variables
 var conversation_id, client_id;
-var canvas = document.getElementById('canvas');
-var ctx = canvas.getContext('2d');
 
 $(document).ready(function () {
   var $chatInput = $('.chat-window--message-input'),
@@ -49,61 +47,7 @@ $(document).ready(function () {
         break;
     }
 
-<<<<<<< HEAD
     return false;
-=======
-    var Microphone = require('./test/Microphone');
-    var handleMicrophone = require('./test/handlemicrophone').handleMicrophone;
-    var showError = require('./test/showerror').showError;
-
-    var running = false;
-    var token = ctx.token;
-    var micOptions = {
-      bufferSize: ctx.buffersize
-    };
-    var mic = new Microphone(micOptions);
-
-    return function(evt) {
-      // Prevent default anchor behavior
-      evt.preventDefault();
-
-      var currentModel = localStorage.getItem('currentModel');
-      var currentlyDisplaying = localStorage.getItem('currentlyDisplaying');
-
-      if (currentlyDisplaying == 'sample' || currentlyDisplaying == 'fileupload') {
-        showError('Currently another file is playing, please stop the file or wait until it finishes');
-        return;
-      }
-      localStorage.setItem('currentlyDisplaying', 'record');
-      if (!running) {
-        $('#resultsText').val('');   // clear hypotheses from previous runs
-        console.log('Not running, handleMicrophone()');
-        handleMicrophone(token, currentModel, mic, function(err) {
-          if (err) {
-            var msg = 'Error: ' + err.message;
-            console.log(msg);
-            showError(msg);
-            running = false;
-            localStorage.setItem('currentlyDisplaying', 'false');
-          } else {
-            recordButton.css('background-color', '#d74108');
-            recordButton.find('img').attr('src', 'images/stop.svg');
-            console.log('starting mic');
-            mic.record();
-            running = true;
-          }
-        });
-      } else {
-        console.log('Stopping microphone, sending stop action message');
-        recordButton.removeAttr('style');
-        recordButton.find('img').attr('src', 'images/microphone.svg');
-        $.publish('hardsocketstop');
-        mic.stop();
-        running = false;
-        localStorage.setItem('currentlyDisplaying', 'false');
-      }
-    };
->>>>>>> a0dc58405739db2e34f98df99f6a2e4a93634c6c
   });
 
   var speechState = '';
