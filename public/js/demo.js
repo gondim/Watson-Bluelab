@@ -30,6 +30,7 @@ $(document).ready(function () {
     $recordButton = $('.recordButton');
   
   $recordButton.click(function(event){
+
     switch (speechState) {
       case 'listening':
         speech.recognizeAbort();

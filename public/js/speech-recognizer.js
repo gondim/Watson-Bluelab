@@ -268,7 +268,7 @@ function SpeechRecognizer(_options) {
 
   this.mic.onAudio = function(data) {
     //console.log('onAudio():',data);
-    if (self.socket.connected)
+    if (self.socket.connected)          //dawnuidaw´nido´w
       self.socket.emit('message', {audio: data, rate: self.mic.sampleRate});
   };
 
@@ -299,7 +299,7 @@ SpeechRecognizer.prototype._init = function() {
 
   console.log('SpeechRecognizer._init():', this.ws);
   var self = this;
-  this.socket = io.connect(this.ws);
+  this.socket = io.connect(this.ws);            //EANUDNWUI
 
   this.socket.on('connect', function() {
     console.log('socket.onconnect()');

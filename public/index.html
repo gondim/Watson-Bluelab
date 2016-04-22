@@ -33,8 +33,7 @@
 	</div>
 </header>
 
-<canvas id="canvas"/>
-</canvas>
+
 
 	<div class="_demo--banner">
 	<div class="_demo--container">
@@ -116,7 +115,7 @@
 
 				<div class="response-box">
 					<div class="response-box--input-text">
-						<input type="text" placeholder="Type a response and hit enter" value="" autocomplete="off" class="chat-window--message-input base--text-input">	
+						<input type="text" id="questionText" placeholder="Type a response and hit enter" value="" autocomplete="off" class="chat-window--message-input base--text-input">	
 					</div>
 					<li id="listen" class="response-box--record-button recordButton">
             			<img id="microphoneIcon" src="images/icons/microphone.svg" class="icon">
@@ -163,7 +162,8 @@
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script type="text/javascript" src="js/speech-recognizer.js"></script>
+	<script type="text/javascript" src="js/socket.io.js"></script>
+	<script type="text/javascript" src="js/demo.js"></script>	
 	<script type="text/javascript" src="js/speech.js"></script> 
-	<script type="text/javascript" src="js/demo.js"></script>
 </body>
 </html>

@@ -16,14 +16,18 @@
 
 'use strict';
 
-var express  = require('express'),
-  app        = express(),
-  fs         = require('fs'),
-  path       = require('path'),
-  vcapServices = require('vcap_services'),
-  bluemix    = require('./config/bluemix'),
-  extend     = require('util')._extend,
-  watson     = require('watson-developer-cloud');
+var express     = require('express'),
+  app           = express(),
+  server        = require('http').createServer(app),
+  io            = require('socket.io').listen(server),
+  fs            = require('fs'),
+  path          = require('path'),
+  vcapServices  = require('vcap_services'),
+  bluemix       = require('./config/bluemix'),
+  extend        = require('util')._extend,
+  watson        = require('watson-developer-cloud'),
+  UAparser      = require('ua-parser-js'),
+  userAgentParser = new UAparser();
 
 // Bootstrap application settings
 require('./config/express')(app);
@@ -78,21 +82,35 @@ app.post('/profile', function(req, res, next) {
 
 var speech_to_text = watson.speech_to_text(credentialsSpeechToText);
 
-//para sabe se pega algum token e nao buga
-app.post('/api/token', function(req, res, next) {
-  authService.getToken({url: config.url}, function(err, token) {
-    if (err)
-      next(err);
-    else
-      res.send(token);
-  });
+// Handle audio stream processing for speech recognition
+app.post('/', function(req, res) {
+    var audio;
+ 
+    if(req.body.url && req.body.url.indexOf('audio/') === 0) {
+        // sample audio stream
+        audio = fs.createReadStream(__dirname + '/../public/' + req.body.url);
+    } else {
+        // malformed url
+        return res.status(500).json({ error: 'Malformed URL' });
+    }
+ 
+    // use Watson to generate a text transcript from the audio stream
+    speech_to_text.recognize({audio: audio, content_type: 'audio/l16; rate=44100'}, function(err, transcript) {
+        if (err)
+            return res.status(500).json({ error: err });
+        else
+            return res.json(transcript);
+    });
 });
 
+// setup sockets
+require('./config/socket')(io, speech_to_text);
 
 // error-handler settings
 require('./config/error-handler')(app);
 module.exports = app;
 
-var port = process.env.VCAP_APP_PORT || 3000;
-app.listen(port);
+//uma tentativa aqui
+var port = (process.env.VCAP_APP_PORT || 3000);
+server.listen(port);
 console.log('listening at:', port);
