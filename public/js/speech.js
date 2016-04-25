@@ -1,66 +1,129 @@
 window.speech = {
-  audio: undefined,
-  recognizer: new SpeechRecognizer({
-    ws: '',
-    model: 'WatsonModel'
-  })
+    recognitionActive: false
 };
 
 
-window.speech.speak = function(message) {
-  if (this.audio == undefined) {
-    this.audio = $('<audio controls autoplay></audio>');
-    $('#audio').append(this.audio);
-  }
+window.speech.speak = function( message ) {
+    
+    if ( window['speechSynthesis'] == undefined) {
+        alert("Sorry, your browser doesn't support the speech synthesis API.");
+        return;   
+    }
+    
+    this.recognizeAbort();
+    setButtonState("default");
+    
+    var cleaned = message.replace(/['"\[\]]+/g, '');
+    var tokens = cleaned.split( "." );
+    
+    window.speechSynthesis.cancel();
+    
+    for (var i=0; i<tokens.length; i++) {
+        var token = tokens[i].trim();
+        
+        if (token.length > 0) {
+            var msg = new SpeechSynthesisUtterance( tokens[i] ); 
 
-  this.recognizeAbort();
-  setButtonState('default');
+            msg.onstart = function (event) {
+                console.log('started');
+                setButtonState("speaking");
+            };
 
-  var cleaned = message.replace(/['"\[\]]+/g, '');
+            msg.onend = function (event) {
+                console.log('stopped token');
 
-  this.audio.attr('src', '/synthesize?text=' + message);
-  this.audio.get(0).play();
+                if ( !window.speechSynthesis.pending ) {
+                    setButtonState("default");
+                    $(".playAnswer").removeClass("playing"); 
+                }
+            };
+
+            window.speechSynthesis.speak(msg);
+        }
+    }
+    
 }
 
 window.speech.stop = function() {
-  if (this.audio != undefined) {
-    this.audio.get(0).pause();
-  }
-
-  //remove button styles in the demo
-  $('.playAnswer').removeClass('playing');
+    
+    window.speechSynthesis.cancel();
 }
 
 
-window.speech.recognizer.onstart = function() {
-  console.log('speech.recognizer.onstart');
-};
+window.speech.recognize = function () {
+    
+    if ( window['webkitSpeechRecognition'] == undefined) {
+        alert("Sorry, your browser doesn't support the speech recognition API.");
+        return;   
+    }
+    console.log("recognize");
 
-window.speech.recognizer.onerror = function(error) {
-  console.log('speech.recognizer.onerror:', error);
+    if ( this.recognition == undefined ) {
+        this.recognition = new webkitSpeechRecognition();
+    }
+    var recognition = this.recognition;
+    
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    
+    recognition.onstart = function() {
+        console.log(event);
+        this.recognitionActive = true;
+    };
+    
+    recognition.onerror = function(event) {
+        console.log(event);
+        recognitionActive = false;
+        
+        var msg = undefined;
+        
+        if (event.error === 'no-speech') {
+            msg = "No speech was detected. Please try again.";
+        } else if (event.error === 'audio-capture') {
+            msg = "Audio capture error, do you have a microphone?";
+        } else if (event.error === 'not-allowed') {
+            msg = "Unable to access your microphone. Please check permissions";
+        }
+        
+        if (msg) {
+            setButtonState("default");
+            alert(msg);
+        }
+    };
+    
+    recognition.onend = function() {
+        console.log(event);
+        recognitionActive = false;
+        
+        if (!window.speechSynthesis.speaking) 
+            setButtonState("default");
+    };
+    
+    recognition.onresult = function(event) {
+        console.log(event);
+        
+        if ( window.speechSynthesis.speaking ) return;
+
+        var result = event.results[event.results.length-1];
+        var transcript = result[0].transcript;
+
+        search( transcript, result.isFinal );
+
+        if ( result.isFinal ) {
+            window.speechSynthesis.cancel();
+        }
+    };
+    
+    this.recognitionActive = true;
+    recognition.start();
 }
 
-window.speech.recognizer.onresult = function(data) {
 
-  // get the transcript from the service result data
-  var result = data.results[data.results.length - 1];
-  var transcript = result.alternatives[0].transcript;
-
-  // do something with the transcript
-  // search(transcript, result.final);
-
-  $('#questionText').val(transcript);
-
-  if (result.final) {
-    window.speech.recognizer.stop();
-  }
+window.speech.recognizeAbort = function () {
+    if (this.recognition) {
+        this.recognition.abort();
+        this.recognitionActive = false;
+    }
 }
 
-window.speech.recognize = function() {
-  this.stop();
-  this.recognizer.start();
-}
 
-window.speech.recognizeAbort = function() {
-  this.recognizer.stop();
-}

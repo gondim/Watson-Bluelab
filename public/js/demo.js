@@ -26,52 +26,10 @@ $(document).ready(function () {
     $jsonPanel = $('#json-panel .base--textarea'),
     $information = $('.data--information'),
     $profile = $('.data--profile'),
-    $loading = $('.loader'),
-    $recordButton = $('.recordButton');
-  
-  $recordButton.click(function(event){
+    $loading = $('.loader');
 
-    switch (speechState) {
-      case 'listening':
-        speech.recognizeAbort();
-        setButtonState('default');
-        break;
-      case 'speaking':
-        speech.stop();
-        $('.play').removeClass('playing');
-        setButtonState('default');
-        break;
-      default:
-        speech.recognize();
-        setButtonState('listening');
-        $('#listen').blur();
-        break;
-    }
-
-    return false;
-  });
 
   var speechState = '';
-
-  function setButtonState(state) {
-  console.log(state);
-  var button = $('#listen');
-  speechState = state;
-
-  button.removeClass('listen').removeClass('stop').removeClass('playing');
-
-  switch (state) {
-    case 'listening':
-      button.addClass('stop');
-      break;
-    case 'speaking':
-      button.addClass('playing');
-      break;
-    default:
-      button.addClass('listen');
-      break;
-    }
-  }
 
   $chatInput.keyup(function(event){
     if(event.keyCode === 13) {

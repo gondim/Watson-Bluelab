@@ -83,7 +83,7 @@ app.post('/profile', function(req, res, next) {
 var speech_to_text = watson.speech_to_text(credentialsSpeechToText);
 
 // Handle audio stream processing for speech recognition
-app.post('/', function(req, res) {
+/*app.post('/', function(req, res) {
     var audio;
  
     if(req.body.url && req.body.url.indexOf('audio/') === 0) {
@@ -101,7 +101,9 @@ app.post('/', function(req, res) {
         else
             return res.json(transcript);
     });
-});
+});*/
+
+
 
 // setup sockets
 require('./config/socket')(io, speech_to_text);
