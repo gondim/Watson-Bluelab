@@ -2,7 +2,7 @@
 var searchTimeout = 0;
 
 
-//fill and submit the form with a random example
+
 function showExample(submit) {
   loadExample();
   if (submit)
@@ -13,7 +13,7 @@ function loadQuery(query) {
   $('#questionText').val(query);
 }
 
-//fill and submit the form with a random example
+
 function search(query, submit) {
   loadQuery(query);
     

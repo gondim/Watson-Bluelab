@@ -67,10 +67,12 @@
 			Escolha um Template
 		</h2>
 		<!--<p>A template that contains prepared structures to create natural dialogs for your app.</p>-->
-		<div class="radio-group">
+		<canvas id="canvas" width="960" height="368"/>
+         		<div class="radio-group">
 			<input type="radio" name="dialog-template" id="hello-radio" value="hello" class="base--radio" checked>
 			<label for="hello-radio" class="base--label radio-group--label">Pedido de pizza</label>
 		</div>
+		</canvas>
 		<div class="separate-line"></div>
 		<h2 class="base--h2">
 			Teste o serviço
@@ -115,9 +117,9 @@
 
 				<div class="response-box">
 					<div class="response-box--input-text">
-						<input type="text" id="questionText" placeholder="Type a response and hit enter" value="" autocomplete="off" class="chat-window--message-input base--text-input">	
+						<input type="text" id="resultsText" placeholder="Type a response and hit enter" value="" autocomplete="off" class="chat-window--message-input base--text-input">	
 					</div>
-					<li id="listen" class="response-box--record-button recordButton">
+					<li id="recordButton" class="response-box--record-button recordButton">
             			<img id="microphoneIcon" src="images/icons/microphone.svg" class="icon">
             		</li>
 				</div>
@@ -160,9 +162,11 @@
 	</article>
 </div>
 
-	<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>	
+	<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
 	<script type="text/javascript" src="js/speech.js"></script>
 	<script type="text/javascript" src="js/speech-recognizer.js"></script>
-	<script type="text/javascript" src="js/demo.js"></script>	 
+	<script type="text/javascript" src="js/demo.js"></script>
+
 </body>
 </html>
