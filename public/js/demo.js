@@ -19,7 +19,7 @@
 'use strict';
 
 // conversation variables
-var conversation_id, client_id;
+var conversation_id, client_id,converse;
 
 $(document).ready(function () {
   var $chatInput = $('.chat-window--message-input'),
@@ -37,7 +37,7 @@ $(document).ready(function () {
     }
   });
  
-  var converse = function(userText) {
+  converse = function(userText) {
     $loading.show();
     // $chatInput.hide();
 

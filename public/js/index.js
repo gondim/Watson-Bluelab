@@ -1136,7 +1136,6 @@ var hslider = document.getElementById('hslider');
 var vslider = document.getElementById('vslider');
 var leftArrowEnabled = false;
 var rightArrowEnabled = false;
-var worker = null;
 var runTimer = false;
 var scrolled = false;
 // var textScrolled = false;
@@ -1814,9 +1813,6 @@ function onResize() {
 
 function resetWorker() {
   runTimer = false;
-  worker.postMessage({
-    type:'clear'
-  });
   pushed = 0;
   popped = 0;
   console.log('---> resetWorker called');
@@ -1900,9 +1896,6 @@ function showCNsKWS(bins, kws) {
 }
 
 function onTimer() {
-  worker.postMessage({
-    type:'shift'
-  });
   if (runTimer == true) {
     setTimeout(onTimer, timeout);
   }
@@ -1917,12 +1910,12 @@ exports.showResult = function(msg, baseString, model) {
     text = text.replace(/%HESITATION\s/g, '');
     text = text.replace(/([^*])\1{2,}/g, '');
 
+
+    // FIM DE MENSAGEM!!!!
     if (msg.results[0].final) {
       console.log('-> ' + text);
-      worker.postMessage({
-        type:'push',
-        msg:msg
-      });
+     
+      
       pushed++;
       console.log('----> pushed', pushed);
       if (runTimer == false) {
@@ -1951,8 +1944,12 @@ exports.showResult = function(msg, baseString, model) {
       else {
         text = text.trim() + '. ';
       }
-      baseString += text;
-      $('#resultsText').val(baseString);
+      baseString = text;
+      console.log('parei :-)');
+      //pega pelo demo.js ,que coloquei uma variavel global
+      converse(baseString);
+
+
     }
     else {
       if (japanese) {
@@ -1964,6 +1961,7 @@ exports.showResult = function(msg, baseString, model) {
     }
   }
   updateTextScroll();
+  $('#resultsText').val('');
   return baseString;
 };
 
