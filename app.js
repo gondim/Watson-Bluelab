@@ -55,6 +55,31 @@ var config = extend({
 
 var authService = watson.authorization(config);
 
+var nlClassifier = watson.natural_language_classifier({
+  url : 'https://gateway.watsonplatform.net/natural-language-classifier/api',
+  username : 'cbc2ebc2-725b-41c0-9eb7-dbee827a4678',
+  password : 'RDgNu0y0khxg',
+  version  : 'v1'
+
+});
+
+//bucho
+app.post('/api/classify', function(req, res, next) {
+  var params = {
+    classifier: process.env.CLASSIFIER_ID || '3a84dfx64-nlc-2068', // pre-trained classifier
+    text: req.body.text
+  };
+
+  nlClassifier.classify(params, function(err, results) {
+    if (err)
+      return next(err);
+    else
+      res.json(results);
+  });
+});
+
+
+
 app.get('/', function(req, res) {
   res.render('index', {
     ct: req._csrfToken,

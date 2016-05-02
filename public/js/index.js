@@ -1946,7 +1946,8 @@ exports.showResult = function(msg, baseString, model) {
       }
       baseString = text;
       console.log('parei :-)');
-      //pega pelo demo.js ,que coloquei uma variavel global
+      //pega pelo demo.js ,que coloquei uma variavel global e natural tb
+      askQuestion(baseString);
       converse(baseString);
 
 
