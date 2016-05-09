@@ -39,6 +39,8 @@
     "express": "~4.13.3",
     "request": "^2.67.0",
     "socket.io": "^1.4.5",
+    "ua-parser-js": "^0.7.10",
+    "vcap_services": "^0.1.7",
     "watson-developer-cloud": "~1.0.6"
   }
 }

@@ -39,12 +39,53 @@ var credentialsDialog =  extend({
   version: 'v1'
 }, bluemix.getServiceCreds('dialog')); // VCAP_SERVICES
 
-var credentialsSpeechToText = extend({
+/*var credentialsSpeechToText = extend({
+  version: 'v1',
+  url: 'https://stream.watsonplatform.net/speech-to-text/api/hu3',
+  username: process.env.STT_USERNAME || '8b9cda7d-18e1-46a8-8129-988391d59a77',
+  password: process.env.STT_PASSWORD || '8es9PgTTLMqH'
+}, vcapServices.getCredentials('speech_to_text'));*/
+
+var config = extend({
   version: 'v1',
   url: 'https://stream.watsonplatform.net/speech-to-text/api',
   username: process.env.STT_USERNAME || '8b9cda7d-18e1-46a8-8129-988391d59a77',
   password: process.env.STT_PASSWORD || '8es9PgTTLMqH'
 }, vcapServices.getCredentials('speech_to_text'));
+
+var authService = watson.authorization(config);
+
+var nlClassifier = watson.natural_language_classifier({
+  url : 'https://gateway.watsonplatform.net/natural-language-classifier/api',
+  username : 'cbc2ebc2-725b-41c0-9eb7-dbee827a4678',
+  password : 'RDgNu0y0khxg',
+  version  : 'v1'
+
+});
+
+//bucho
+app.post('/api/classify', function(req, res, next) {
+  var params = {
+    classifier: process.env.CLASSIFIER_ID || '3a84cfx63-nlc-2268', // pre-trained classifier
+    text: req.body.text
+  };
+
+  nlClassifier.classify(params, function(err, results) {
+    if (err)
+      return next(err);
+    else
+      res.json(results);
+  });
+});
+
+
+
+app.get('/', function(req, res) {
+  res.render('index', {
+    ct: req._csrfToken,
+    GOOGLE_ANALYTICS_ID: process.env.GOOGLE_ANALYTICS_ID
+  });
+});
 
 var dialog_id_in_json = (function() {
   try {
@@ -80,10 +121,9 @@ app.post('/profile', function(req, res, next) {
   });
 });
 
-var speech_to_text = watson.speech_to_text(credentialsSpeechToText);
 
 // Handle audio stream processing for speech recognition
-app.post('/', function(req, res) {
+/*app.post('/', function(req, res) {
     var audio;
  
     if(req.body.url && req.body.url.indexOf('audio/') === 0) {
@@ -101,10 +141,18 @@ app.post('/', function(req, res) {
         else
             return res.json(transcript);
     });
+});*/
+
+// Get token using your credentials
+app.post('/api/token', function(req, res, next) {
+  authService.getToken({url: config.url}, function(err, token) {
+    if (err)
+      next(err);
+    else
+      res.send(token);
+  });
 });
 
-// setup sockets
-require('./config/socket')(io, speech_to_text);
 
 // error-handler settings
 require('./config/error-handler')(app);
