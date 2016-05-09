@@ -15,7 +15,7 @@
  */
 
 'use strict';
-var askQuestion
+var askQuestion;
 $(document).ready(function() {
 
   // jQuery variables attached to DOM elements
@@ -35,7 +35,6 @@ $(document).ready(function() {
 
   $('#resultsText').keyup(function(event){
     if(event.keyCode === 13) {
-      console.log($(this).val());
       askQuestion($(this).val());
     }
   });
@@ -54,12 +53,14 @@ $(document).ready(function() {
 
     $.post('/api/classify', {text: question})
       .done(function onSucess(answers){
-        $results.show();
-        $classification.text(answers.top_class);
-        console.log(answers.top_class);
-        $confidence.text(Math.floor(answers.classes[0].confidence * 100) + '%');
-        $('html, body').animate({ scrollTop: $(document).height() }, 'fast');
-        $loading.hide();
+        //$results.show();
+        //$classification.text(answers.top_class);
+        converse(question,answers.top_class);
+        console.log('natural -> ' + answers.top_class);
+
+        //$confidence.text(Math.floor(answers.classes[0].confidence * 100) + '%');
+       // $('html, body').animate({ scrollTop: $(document).height() }, 'fast');
+       // $loading.hide();
       })
       .fail(function onError(error) {
         $error.show();

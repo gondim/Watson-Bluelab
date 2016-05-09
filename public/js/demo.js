@@ -21,6 +21,8 @@
 // conversation variables
 var conversation_id, client_id,converse;
 
+
+
 $(document).ready(function () {
   var $chatInput = $('.chat-window--message-input'),
     $jsonPanel = $('#json-panel .base--textarea'),
@@ -32,12 +34,12 @@ $(document).ready(function () {
   var speechState = '';
 
   $chatInput.keyup(function(event){
-    if(event.keyCode === 13) {
-      converse($(this).val());
-    }
+    //if(event.keyCode === 13) {
+      //converse($(this).val());
+    //}
   });
  
-  converse = function(userText) {
+  converse = function(userText,intention) {
     $loading.show();
     // $chatInput.hide();
 
@@ -46,7 +48,11 @@ $(document).ready(function () {
       submitMessage(userText);
 
     // build the conversation parameters
+    //aqui ele vai pega o parametro da frase que eu criei,logo é aqui onde vou
+    //colocar o intenção
+    
     var params = { input : userText };
+    console.log('cheguei -> ' + intention);
 
     // check if there is a conversation in place and continue that
     // by specifing the conversation_id and client_id
