@@ -51,7 +51,7 @@ $(document).ready(function () {
     //aqui ele vai pega o parametro da frase que eu criei,logo é aqui onde vou
     //colocar o intenção
     
-    var params = { input : userText };
+    var params = { input : intention };
     console.log('cheguei -> ' + intention);
 
     // check if there is a conversation in place and continue that
@@ -73,7 +73,8 @@ $(document).ready(function () {
 
         console.log(dialog);
         var texts = dialog.conversation.response;
-        var response = texts.join('&lt;br/&gt;'); // &lt;br/&gt; is <br/>
+        //para melhora o negocio pro getSeech
+        var response = texts.join('')//.join('&lt;br/&gt;'); // &lt;br/&gt; is <br/>
 
         $chatInput.show();
         $chatInput[0].focus();
@@ -83,8 +84,9 @@ $(document).ready(function () {
         addProperty($information, 'Dialog ID: ', dialog.dialog_id);
         addProperty($information, 'Conversation ID: ', conversation_id);
         addProperty($information, 'Client ID: ', client_id);
-
+        //text to speech 
         talk('WATSON', response); // show
+        getSpeech(response);
 
         getProfile();
       })
