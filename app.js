@@ -153,6 +153,25 @@ app.post('/api/token', function(req, res, next) {
   });
 });
 
+var textToSpeech = watson.text_to_speech({
+  version: 'v1',
+  username: '03619c31-8224-43ae-884a-dac3f5c0b6b9',
+  password: 'TB8MX7dRYekt'
+});
+
+app.get('/api/synthesize', function(req, res, next) {
+  var transcript = textToSpeech.synthesize(req.query);
+  transcript.on('response', function(response) {
+    if (req.query.download) {
+      response.headers['content-disposition'] = 'attachment; filename=transcript.ogg';
+    }
+  });
+  transcript.on('error', function(error) {
+    next(error);
+  });
+  transcript.pipe(res);
+});
+
 
 // error-handler settings
 require('./config/error-handler')(app);

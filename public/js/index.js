@@ -1947,7 +1947,6 @@ exports.showResult = function(msg, baseString, model) {
       baseString = text;
       //pega pelo demo.js ,que coloquei uma variavel global e natural tb
       askQuestion(baseString);
-      converse(baseString);
 
 
     }
