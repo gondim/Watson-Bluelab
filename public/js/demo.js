@@ -74,7 +74,7 @@ $(document).ready(function () {
         console.log(dialog);
         var texts = dialog.conversation.response;
         //para melhora o negocio pro getSeech
-        var response = texts.join('')//.join('&lt;br/&gt;'); // &lt;br/&gt; is <br/>
+        var response = texts.join(' ')//.join('&lt;br/&gt;'); // &lt;br/&gt; is <br/>
 
         $chatInput.show();
         $chatInput[0].focus();
