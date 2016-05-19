@@ -52,7 +52,7 @@ $(document).ready(function () {
     //colocar o intenção
     
     var params = { input : intention };
-    console.log('cheguei -> ' + intention);
+    //console.log('cheguei -> ' + intention);
 
     // check if there is a conversation in place and continue that
     // by specifing the conversation_id and client_id

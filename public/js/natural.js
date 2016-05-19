@@ -55,8 +55,16 @@ $(document).ready(function() {
       .done(function onSucess(answers){
         //$results.show();
         //$classification.text(answers.top_class);
-        converse(question,answers.top_class);
-        console.log('natural -> ' + answers.top_class);
+        
+        
+        if(Math.floor(answers.classes[0].confidence * 100) >= 85){
+          converse(question,answers.top_class);
+          console.log('natural -> ' + answers.top_class);
+        }else{
+          converse(question,question);
+          console.log('frase -> ' + question);
+        }
+        console.log('porcentagem ->' + Math.floor(answers.classes[0].confidence * 100) + '%' )
 
         //$confidence.text(Math.floor(answers.classes[0].confidence * 100) + '%');
        // $('html, body').animate({ scrollTop: $(document).height() }, 'fast');
