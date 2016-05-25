@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog xsi:noNamespaceSchemaLocation="WatsonDialogDocument_1.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <flow>
+        <folder label="Main" id="folder_0000001">
+            <output id="output_0000001">
+                <prompt selectionType="RANDOM">
+                    <item>Bem Vindo ao Bluelab. Como posso chamar-lo?</item>
+                    <item>Olá eu sou Watson. Qual é seu nome?</item>
+                    <item>Bom dia. Como se chama?</item>
+                </prompt>
+                <getUserInput id="getUserInput_0000001">
+                    <search ref="input_0000007"/>
+                    <search ref="input_0000008"/>
+                    <search ref="input_0000009"/>
+                    <input id="input_0000001">
+                        <grammar>
+                            <item>Me chamo (DYNAMIC_DATA)={User_Name}</item>
+                            <item>Meu nome é (DYNAMIC_DATA)={User_Name}</item>
+                            <item>(DYNAMIC_DATA)={User_Name}</item>
+                        </grammar>
+                        <action varName="User_Name" operator="SET_TO">{User_Name.source}</action>
+                        <output>
+                            <prompt selectionType="RANDOM">
+                                <item>Bom te conhecer {User_Name}.</item>
+                                <item>Ola {User_Name}!</item>
+                                <item>Prazer {User_Name}.</item>
+                            </prompt>
+                            <goto ref="output_0000002"/>
+                        </output>
+                    </input>
+                    <default>
+                        <output>
+                            <prompt selectionType="SEQUENTIAL">
+                                <item>Desculpa não entendi.</item>
+                                <item>Não consegui entender.</item>
+                                <item>Poderia repetir.</item>
+                            </prompt>
+                        </output>
+                    </default>
+                </getUserInput>
+            </output>
+        </folder>
+        <folder label="EstadoUnifor" id="folder_0000002">
+            <output id="output_0000002">
+                <prompt selectionType="RANDOM">
+                    <item>Você é estudante da Unifor?</item>
+                    <item>Voce estuda na Unifor?</item>
+                </prompt>
+                <getUserInput id="getUserInput_0000002">
+                    <search ref="input_0000009"/>
+                    <input id="input_0000002">
+                        <grammar>
+                            <item>Sim</item>
+                        </grammar>
+                        <action varName="EstadoUnifor" operator="SET_TO_YES" />
+                        <output>
+                            <prompt selectionType="RANDOM">
+                                <item>Parabens você estuda na melhor Universidade do Brasil.</item>
+                                <item>Otima escolha.</item>
+                                <item>Que otimo.</item>
+                            </prompt>
+                            <goto ref="output_0000003" />
+                        </output>
+                    </input>
+                    <input id="input_0000003">
+                        <grammar>
+                            <item>Não</item>
+                        </grammar>
+                        <action varName="EstadoUnifor" operator="SET_TO_NO" />
+                        <output>
+                            <prompt selectionType="RANDOM">
+                                <item>Que tristeza.</item>
+                                <item>Infelizmente.</item>
+                                <item>Você poderia ter feito uma escolha melhor.</item>
+                            </prompt>
+                            <goto ref="output_0000006" />
+                        </output>
+                    </input>
+                    <default>
+                        <output>
+                            <prompt selectionType="SEQUENTIAL">
+                                <item>Desculpa não entendi.</item>
+                                <item>Não consegui entender.</item>
+                                <item>Poderia repetir.</item>
+                            </prompt>
+                        </output>
+                    </default>
+                </getUserInput>
+            </output>
+        </folder>
+        <folder label="CursoUnifor" id="folder_0000003">
+            <output id="output_0000003">
+                <prompt selectionType="RANDOM">
+                    <item>Qual é seu curso?</item>
+                    <item>O que você esta cursando?</item>
+                    <item>De que curso você é?</item>
+                </prompt>
+                <getUserInput id="getUserInput_0000003">
+                    <input id="input_0000004">
+                        <grammar>
+                            <item>(CURSOS_CCT)={Curso}</item>
+                            <item>Estou cursando (CURSOS_CCT)={Curso}</item>
+                        </grammar>
+                        <action varName="Curso" operator="SET_TO">{Curso.source}</action>
+                        <output>
+                            <prompt selectionType="RANDOM">
+                                <item>Excelente.</item>
+                            </prompt>
+                            <goto ref="output_0000004" />
+                        </output>
+                    </input>
+                    <input id="input_0000005">
+                        <grammar>
+                            <item>(CURSOS_CCJ)={Curso}</item>
+                            <item>Estou cursando (CURSOS_CCJ)={Curso}</item>
+                        </grammar>
+                        <action varName="Curso" operator="SET_TO">{Curso.source}</action>
+                        <output>
+                            <prompt selectionType="RANDOM">
+                                <item>Ok</item>
+                            </prompt>
+                            <goto ref="output_0000005" />
+                        </output>
+                    </input>
+                    <input id="input_0000006">
+                        <grammar>
+                            <item>(CURSOS_CCS)={Curso}</item>
+                            <item>Estou cursando (CURSOS_CCS)={Curso}</item>
+                        </grammar>
+                        <action varName="Curso" operator="SET_TO">{Curso.source}</action>
+                        <output>
+                            <prompt selectionType="RANDOM">
+                                <item>Ok</item>
+                                <item>Certo</item>
+                            </prompt>
+                            <goto ref="output_0000008" />
+                        </output>
+                    </input>
+                    <default>
+                        <output>
+                            <prompt selectionType="SEQUENTIAL">
+                                <item>Desculpa não entendi.</item>
+                                <item>Não consegui entender.</item>
+                                <item>Poderia repetir.</item>
+                            </prompt>
+                        </output>
+                    </default>
+                </getUserInput>
+            </output>
+        </folder>
+        <folder label="SobreBluelab" id="folder_0000004">
+            <output id="output_0000004">
+                <prompt selectionType="RANDOM">
+                    <item>
+                        {User_Name}, para você aluno do CCT, o Bluelab oferece um ambiente repleto com ferramentas IBM para o ajudar no desenvolvimento de aplicações.
+                        O Bluemix por exemplo é uma plataforma como serviço baseada em Cloud Foundry que oferece a seus usuários funções e serviços em nível empresarial e que possam ser facilmente integrados aos seus aplicativos de nuvem sem que seja necessário saber como instalá-los ou configurá-los.
+                        (Falar Mais)
+                    </item>
+                    <item>
+                        Para os alunos do CCT, o Bluelab oferece um ambiente repleto com ferramentas IBM para o ajudar no desenvolvimento de aplicações como o Watson e o Bluemix.
+                        O IBM Bluemix é a oferta de nuvem mais recente da IBM, é uma plataforma como serviço baseada em Cloud Foundry que oferece a seus usuários funções e serviços em nível empresarial e que possam ser facilmente integrados aos seus aplicativos de nuvem sem que seja necessário saber como instalá-los ou configurá-los.
+                        No Bluemix também está integrado o IBM Watson, o simbolo de uma nova era de computação inteligente. Seu sistema de programação cognitiva fez bastante sucesso no desafio do Jeopardy, um programa americano.
+                    </item>
+                </prompt>
+                <goto ref="output_0000007" />
+            </output>
+            <output id="output_0000005">
+                <prompt selectionType="RANDOM">
+                    <item>Fala o que o BlueLab tem para oferecer para o CCJ</item>
+                </prompt>
+            </output>
+            <output id="output_0000008">
+                <prompt selectionType="RANDOM">
+                    <item>
+                        Para todos os alunos da universidade o Bluelab oferece um ambiente um repletos de ferramentas IBM, como o Watson e o Bluemix, que podem ajudar em diversas maneiras. O Watson, por exemplo, é uma ferramenta computacional com um poderoso poder de aprendizagem, que com uma boa base de dados coletado ele poderia ser aproveitado na medicina para ser usado para dar suporte a diagnósticos ou evitar erros de diagnósticos.
+                        As possibilidades de utilidades do Bluelab em inovações na areá da saudê são infinitas, aproveite para vim aqui inovar.
+                    </item>
+                </prompt>
+                <goto ref="output_0000007" />
+            </output>
+            <output id="output_0000006">
+                <prompt selectionType="RANDOM">
+                    <item>Fala um poco sobre o BlueLab e a Unifor</item>
+                </prompt>
+            </output>
+        </folder>
+        <folder label="Despedida" id="folder_0000005">
+            <output id="output_0000007">
+                <prompt selectionType="RANDOM">
+                    <item>Caso mais alguma duvida, fique a vontade de falar com um estagiario do Bluelab</item>
+                    <item>Caso mais perguntas, fale com um estagiario do Bluelab</item>
+                    <item>Se tiver alguma duvida, pergunte ao estagiario do Bluelab</item>
+                </prompt>
+            </output>
+        </folder>
+        <folder label="ForaFluxos" id="folder_0000006">
+            <input id="input_0000007">
+                <grammar>
+                    <item>Oi</item>
+                    <item>Ola</item>
+                </grammar>
+                <output>
+                    <prompt selectionType="RANDOM">
+                        <item>Ola, tudo bem?</item>
+                    </prompt>
+                </output>
+            </input>
+            <input id="input_0000008">
+                <grammar>
+                    <item>Qual é a resposta para tudo?</item>
+                </grammar>
+                <output>
+                    <prompt selectionType="RANDOM">
+                        <item>A resposta é muito simples 42</item>
+                        <item>De acordo com Douglas Adams, 42</item>
+                    </prompt>
+                </output>
+            </input>
+            <input id="input_0000009">
+                <grammar>
+                    <item>Como você esta?</item>
+                    <item>Como você esta se sentindo?</item>
+                    <item>Como você esta se sentindo hoje?</item>
+                </grammar>
+                <output>
+                    <if>
+                        <cond varName="User_Name" operator="HAS_VALUE"/>
+                        <output>
+                            <prompt selectionType="RANDOM">
+                                <item>Estou otimo, muito bom falar com você, {User_Name}</item>
+                                <item>Estou muito bem, obrigado por perguntar {User_Name}</item>
+                                <item>{User_Name} estou me sentindo otimo</item>
+                            </prompt>
+                        </output>
+                    </if>
+                    <if>
+                        <cond varName="User_Name" operator="IS_BLANK"/>
+                        <output>
+                            <prompt selectionType="RANDOM">
+                                <item>Estou otimo, muito bom falar com você</item>
+                                <item>Estou muito bem</item>
+                                <item>Estou me sentindo otimo</item>
+                            </prompt>
+                        </output>
+                    </if>
+                </output>
+            </input>
+        </folder>
+    </flow>
+    <entities>
+        <entity name="CURSOS_CCT" entityType="GENERIC">
+            <value name="Arquitetura e Urbanismo" value="Arquitetura e Urbanismo">
+                <grammar>
+                    <item>Arquitetura</item>
+                    <item>Arquitetura e Urbanismo</item>
+                </grammar>
+            </value>
+            <value name="Ciência da Computação" value="Ciência da Computação">
+                <grammar>
+                    <item>Ciência da Computação</item>
+                </grammar>
+            </value>
+            <value name="Engenharia Ambiental e Sanitária" value="Engenharia Ambiental e Sanitária">
+                <grammar>
+                    <item>Engenharia Ambiental</item>
+                    <item>Engenharia Ambiental e Sanitária</item>
+                </grammar>
+            </value>
+            <value name="Engenharia Civil" value="Engenharia Civil">
+                <grammar>
+                    <item>Civil</item>
+                    <item>Engenharia Civil</item>
+                </grammar>
+            </value>
+            <value name="Engenharia de Computação" value="Engenharia de Computação">
+                <grammar>
+                    <item>Engenharia da Computação</item>
+                </grammar>
+            </value>
+            <value name="Engenharia de Controle e Automação" value="Engenharia de Controle e Automação">
+                <grammar>
+                    <item>Automação</item>
+                    <item>Controle e Automação</item>
+                    <item>Engenharia de Controle e Automação</item>
+                </grammar>
+            </value>
+            <value name="Engenharia Elétrica" value="Engenharia Elétrica">
+                <grammar>
+                    <item>Elétrica</item>
+                    <item>Engenharia Elétrica</item>
+                </grammar>
+            </value>
+            <value name="Engenharia Eletrônica" value="Engenharia Eletrônica">
+                <grammar>
+                    <item>Eletrônica</item>
+                    <item>Engenharia Eletrônica</item>
+                </grammar>
+            </value>
+            <value name="Engenharia Mecânica" value="Engenharia Mecânica">
+                <grammar>
+                    <item>Mecânica</item>
+                    <item>Engenharia Mecânica</item>
+                </grammar>
+            </value>
+            <value name="Engenharia de Produção" value="Engenharia de Produção">
+                <grammar>
+                    <item>Engenharia de Produção</item>
+                </grammar>
+            </value>
+            <value name="Engenharia de Telecomunicações" value="Engenharia de Telecomunicações">
+                <grammar>
+                    <item>Telecomunicações</item>
+                    <item>Engenharia de Telecomunicações</item>
+                </grammar>
+            </value>
+        </entity>
+        <entity name="CURSOS_CCJ" entityType="GENERIC">
+            <value name="Direito" value="Direito">
+                <grammar>
+                    <item>Direito</item>
+                </grammar>
+            </value>
+        </entity>
+        <entity name="CURSOS_CCS" entityType="GENERIC">
+            <value name="Medicina" value="Medicina">
+                <grammar>
+                    <item>Medicina</item>
+                </grammar>
+            </value>
+            <value name="Educação Física" value="Educação Física">
+                <grammar>
+                    <item>Educação Física</item>
+                </grammar>
+            </value>
+            <value name="Enfermagem" value="Enfermagem">
+                <grammar>
+                    <item>Enfermagem</item>
+                </grammar>
+            </value>
+            <value name="Farmácia" value="Farmácia">
+                <grammar>
+                    <item>Farmácia</item>
+                </grammar>
+            </value>
+            <value name="Fisioterapia" value="Fisioterapia">
+                <grammar>
+                    <item>Fisioterapia</item>
+                </grammar>
+            </value>
+            <value name="Fonoaudiologia" value="Fonoaudiologia">
+                <grammar>
+                    <item>Fonoaudiologia</item>
+                </grammar>
+            </value>
+            <value name="Medicina" value="Medicina">
+                <grammar>
+                    <item>Medicina</item>
+                </grammar>
+            </value>
+            <value name="Medicina Veterinária" value="Medicina Veterinária">
+                <grammar>
+                    <item>Veterinária</item>
+                    <item>Medicina Veterinária</item>
+                </grammar>
+            </value>
+            <value name="Nutrição" value="Nutrição">
+                <grammar>
+                    <item>Nutrição</item>
+                </grammar>
+            </value>
+            <value name="Odontologia" value="Odontologia">
+                <grammar>
+                    <item>Odontologia</item>
+                </grammar>
+            </value>
+            <value name="Psicologia" value="Psicologia">
+                <grammar>
+                    <item>Psicologia</item>
+                </grammar>
+            </value>
+            <value name="Terapia Ocupacional" value="Terapia Ocupacional*">
+                <grammar>
+                    <item>Terapia Ocupacional*</item>
+                </grammar>
+            </value>
+        </entity>
+        <entity name="CURSOS_CCCG" entityType="GENERIC">
+            <value name="Administração" value="Administração">
+                <grammar>
+                    <item>Administração</item>
+                </grammar>
+            </value>
+            <value name="Audiovisual e Novas Mídias" value="Audiovisual e Novas Mídias">
+                <grammar>
+                    <item>Audiovisual</item>
+                    <item>Audiovisual e Novas Mídias</item>
+                </grammar>
+            </value>
+            <value name="Artes Visuais" value="Artes Visuais">
+                <grammar>
+                    <item>Artes Visuais</item>
+                </grammar>
+            </value>
+            <value name="Comércio Exterior" value="Comércio Exterior">
+                <grammar>
+                    <item>Comércio Exterior</item>
+                </grammar>
+            </value>
+            <value name="Ciências Contábeis" value="Ciências Contábeis">
+                <grammar>
+                    <item>Contábeis</item>
+                    <item>Ciências Contábeis</item>
+                </grammar>
+            </value>
+            <value name="Ciências Econômicas" value="Ciências Econômicas">
+                <grammar>
+                    <item>Econômia</item>
+                    <item>Ciências Econômicas</item>
+                </grammar>
+            </value>
+            <value name="Jornalismo" value="Jornalismo">
+                <grammar>
+                    <item>Jornalismo</item>
+                </grammar>
+            </value>
+            <value name="Publicidade e Propaganda" value="Publicidade e Propaganda">
+                <grammar>
+                    <item>Publicidade</item>
+                    <item>Publicidade e Propaganda</item>
+                </grammar>
+            </value>
+            <value name="Teatro" value="Teatro">
+                <grammar>
+                    <item>Teatro</item>
+                </grammar>
+            </value>
+            <value name="Turismo" value="Turismo">
+                <grammar>
+                    <item>Turismo</item>
+                </grammar>
+            </value>
+            <value name="Turismo e Hotelaria" value="Turismo e Hotelaria">
+                <grammar>
+                    <item>Hotelaria</item>
+                    <item>Turismo</item>
+                    <item>Turismo e Hotelaria</item>
+                </grammar>
+            </value>
+        </entity>
+        <entity name="DYNAMIC_DATA" entityType="GENERIC">
+            <value name="DataCapture" value="DataCapture">
+                <grammar>
+                    <item>*</item>
+                </grammar>
+            </value>
+            <entityRules></entityRules>
+        </entity>
+    </entities>
+    <variables>
+        <var_folder name="UserData">
+            <var name="User_Name" type="TEXT"/>
+            <var name="EstadoUnifor" type="YESNO"/>
+            <var name="Curso" type="TEXT"/>
+        </var_folder>
+    </variables>
+</dialog>
