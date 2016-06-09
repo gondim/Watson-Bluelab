@@ -174,7 +174,7 @@ function updateDialogFiles(credentials) {
 
 updateDialogFiles({
     url: 'https://gateway.watsonplatform.net/dialog/api',
-    username: 'fe0cf5b3-9a2a-42e7-ac3e-061a97b0e7cd',
-    password: '4rIHezMqxPTe',
+    username: '87d3b86e-ffb3-4d8d-ae0c-26a97fc52272',
+    password: '5WoGOBTFmFKq',
     version: 'v1'
 });

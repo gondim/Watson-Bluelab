@@ -57,7 +57,7 @@ $(document).ready(function() {
         //$classification.text(answers.top_class);
         
         
-        if(Math.floor(answers.classes[0].confidence * 100) >= 95){
+        if(Math.floor(answers.classes[0].confidence * 100) >= 90){
           converse(question,answers.top_class);
           console.log('natural -> ' + answers.top_class);
         }else{

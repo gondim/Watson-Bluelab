@@ -15,8 +15,9 @@ getSpeech = function(text){
 
 	audio.pause();
     audio.src = URL;
-    audio.play();
 
+    audio.play();
+    //console.log("heuheuehuehuehueh " + audio.duration;
 }
 
 });

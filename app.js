@@ -34,8 +34,8 @@ require('./config/express')(app);
 
 var credentialsDialog =  extend({
   url: 'https://gateway.watsonplatform.net/dialog/api',
-  username: 'fe0cf5b3-9a2a-42e7-ac3e-061a97b0e7cd',
-  password: '4rIHezMqxPTe',
+  username: '87d3b86e-ffb3-4d8d-ae0c-26a97fc52272',
+  password: '5WoGOBTFmFKq',
   version: 'v1'
 }, bluemix.getServiceCreds('dialog')); // VCAP_SERVICES
 
@@ -65,7 +65,7 @@ var nlClassifier = watson.natural_language_classifier({
 
 app.post('/api/classify', function(req, res, next) {
   var params = {
-    classifier: process.env.CLASSIFIER_ID || '3a84d1x62-nlc-5014', // pre-trained classifier
+    classifier: process.env.CLASSIFIER_ID || '2373f5x67-nlc-925', // pre-trained classifier
     text: req.body.text
   };
 

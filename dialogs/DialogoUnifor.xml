@@ -50,7 +50,7 @@
                     <search ref="input_0000009"/>
                     <input id="input_0000002">
                         <grammar>
-                            <item>Sim</item>
+                            <item>sim</item>
                         </grammar>
                         <action varName="EstadoUnifor" operator="SET_TO_YES" />
                         <output>
@@ -64,7 +64,7 @@
                     </input>
                     <input id="input_0000003">
                         <grammar>
-                            <item>Não</item>
+                            <item>nao</item>
                         </grammar>
                         <action varName="EstadoUnifor" operator="SET_TO_NO" />
                         <output>
@@ -73,7 +73,7 @@
                                 <item>Infelizmente.</item>
                                 <item>Você poderia ter feito uma escolha melhor.</item>
                             </prompt>
-                            <goto ref="output_0000006" />
+                            <goto ref="output_0000007" />
                         </output>
                     </input>
                     <default>
@@ -180,7 +180,7 @@
             </output>
             <output id="output_0000006">
                 <prompt selectionType="RANDOM">
-                    <item>Fala um poco sobre o BlueLab e a Unifor</item>
+                    <item>Irei falar um pouco sobre o BlueLab e a Unifor</item>
                 </prompt>
             </output>
         </folder>
@@ -257,13 +257,12 @@
             </value>
             <value name="Ciência da Computação" value="Ciência da Computação">
                 <grammar>
-                    <item>Ciência da Computação</item>
+                    <item>ciências da computação</item>
                 </grammar>
             </value>
             <value name="Engenharia Ambiental e Sanitária" value="Engenharia Ambiental e Sanitária">
                 <grammar>
-                    <item>Engenharia Ambiental</item>
-                    <item>Engenharia Ambiental e Sanitária</item>
+                    <item>engenharia ambiental</item>
                 </grammar>
             </value>
             <value name="Engenharia Civil" value="Engenharia Civil">
@@ -274,14 +273,12 @@
             </value>
             <value name="Engenharia de Computação" value="Engenharia de Computação">
                 <grammar>
-                    <item>Engenharia da Computação</item>
+                    <item>engenharia da computação</item>
                 </grammar>
             </value>
             <value name="Engenharia de Controle e Automação" value="Engenharia de Controle e Automação">
                 <grammar>
-                    <item>Automação</item>
-                    <item>Controle e Automação</item>
-                    <item>Engenharia de Controle e Automação</item>
+                    <item>controle e automação</item>
                 </grammar>
             </value>
             <value name="Engenharia Elétrica" value="Engenharia Elétrica">
