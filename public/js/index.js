@@ -1946,6 +1946,7 @@ exports.showResult = function(msg, baseString, model) {
       }
       baseString = text;
       //pega pelo demo.js ,que coloquei uma variavel global e natural tb
+      comecarTime();
       askQuestion(baseString);
 
 
@@ -2532,6 +2533,7 @@ exports.initRecordButton = function(ctx) {
   var recordButton = $('#recordButton');
 
   recordButton.click((function() {
+    
 
     var running = false;
     var token = ctx.token;
@@ -2566,11 +2568,13 @@ exports.initRecordButton = function(ctx) {
             recordButton.css('background-color', '#d74108');
             recordButton.find('img').attr('src', 'images/stop.svg');
             console.log('starting mic');
+            comecarTime();
             mic.record();
             running = true;
           }
         });
       } else {
+        terminarTime();
         console.log('Stopping microphone, sending stop action message');
         recordButton.removeAttr('style');
         recordButton.find('img').attr('src', 'images/microphone.svg');
@@ -2581,6 +2585,7 @@ exports.initRecordButton = function(ctx) {
       }
     };
   })());
+
 };
 
 },{"../Microphone":1,"../handlemicrophone":4,"./showerror":19}],17:[function(require,module,exports){

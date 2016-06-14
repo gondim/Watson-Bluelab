@@ -56,7 +56,6 @@ $(document).ready(function() {
         //$results.show();
         //$classification.text(answers.top_class);
         
-        
         if(Math.floor(answers.classes[0].confidence * 100) >= 90){
           converse(question,answers.top_class);
           console.log('natural -> ' + answers.top_class);
@@ -77,6 +76,14 @@ $(document).ready(function() {
         $loading.hide();
       });
   };
+
+
+
+
+
+
+
+
 
   [
     'Is it hot outside?',
