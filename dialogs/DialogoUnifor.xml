@@ -12,6 +12,7 @@
                     <search ref="input_0000007"/>
                     <search ref="input_0000008"/>
                     <search ref="input_0000009"/>
+                    <search ref="input_00000010"/>
                     <input id="input_0000001">
                         <grammar>
                             <item>Me chamo (DYNAMIC_DATA)={User_Name}</item>
@@ -29,6 +30,7 @@
                         </output>
                     </input>
                     <default>
+                        
                         <output>
                             <prompt selectionType="SEQUENTIAL">
                                 <item>Desculpa não entendi.</item>
@@ -48,6 +50,7 @@
                 </prompt>
                 <getUserInput id="getUserInput_0000002">
                     <search ref="input_0000009"/>
+                    <search ref="input_00000010"/>
                     <input id="input_0000002">
                         <grammar>
                             <item>sim</item>
@@ -96,6 +99,7 @@
                     <item>De que curso você é?</item>
                 </prompt>
                 <getUserInput id="getUserInput_0000003">
+                    <search ref="input_00000010"/>
                     <input id="input_0000004">
                         <grammar>
                             <item>(CURSOS_CCT)={Curso}</item>
@@ -191,6 +195,7 @@
                     <item>Caso mais perguntas, fale com um estagiario do Bluelab</item>
                     <item>Se tiver alguma duvida, pergunte ao estagiario do Bluelab</item>
                 </prompt>
+                <goto ref="output_0000001" />
             </output>
         </folder>
         <folder label="ForaFluxos" id="folder_0000006">
@@ -244,6 +249,17 @@
                         </output>
                     </if>
                 </output>
+            </input>
+            <input id="input_00000010">
+                        <grammar>
+                            <item>nada</item>
+                        </grammar>
+                        <output>
+                            <prompt selectionType="RANDOM">
+                                <item>vamos desde o inicio.</item>
+                            </prompt>
+                            <goto ref="output_0000001" />
+                        </output>
             </input>
         </folder>
     </flow>

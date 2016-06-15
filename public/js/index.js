@@ -2566,7 +2566,12 @@ exports.initRecordButton = function(ctx) {
             localStorage.setItem('currentlyDisplaying', 'false');
           } else {
             recordButton.css('background-color', '#d74108');
-            recordButton.find('img').attr('src', 'images/stop.svg');
+//imagens!
+//imagens!
+//imagens!
+//imagens!
+//imagens!
+            //recordButton.find('img').attr('src', 'images/stop.svg');
             console.log('starting mic');
             comecarTime();
             mic.record();
@@ -2574,10 +2579,10 @@ exports.initRecordButton = function(ctx) {
           }
         });
       } else {
-        terminarTime();
+        limparTime();
         console.log('Stopping microphone, sending stop action message');
         recordButton.removeAttr('style');
-        recordButton.find('img').attr('src', 'images/microphone.svg');
+        //recordButton.find('img').attr('src', 'images/microphone.svg');
         $.publish('hardsocketstop');
         mic.stop();
         running = false;

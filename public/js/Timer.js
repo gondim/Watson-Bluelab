@@ -25,10 +25,13 @@ function timer()
      return;
   }
   console.log(count);
-  //Do code for showing the number of seconds here
 }
 
   function terminarTime(){
      clearInterval(counter);
      recordbutton.click();
+  }
+
+  function limparTime(){
+     clearInterval(counter);
   }
