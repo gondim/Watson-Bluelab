@@ -20,6 +20,8 @@
 
 // conversation variables
 var conversation_id, client_id,converse;
+//setando isso no index.js
+var isRun = false;
 
 
 
@@ -100,7 +102,7 @@ $(document).ready(function () {
       });
 
   };
-
+ // pegando o textao
   var getProfile = function() {
     var params = {
       conversation_id: conversation_id,
@@ -110,8 +112,13 @@ $(document).ready(function () {
     $.post('/profile', params).done(function(data) {
       $profile.empty();
       data.name_values.forEach(function(par) {
-        if (par.value !== '')
+        if (par.value !== ''){
           addProperty($profile, par.name + ':', par.value);
+          console.log(isRun);
+            if(par.name == 'Curso' && isRun == true){
+              recordbutton.click();
+            }
+        }
       });
     }).fail(function(error){
       talk('WATSON', error.responseJSON ? error.responseJSON.error : error.statusText);

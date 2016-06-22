@@ -1946,7 +1946,9 @@ exports.showResult = function(msg, baseString, model) {
       }
       baseString = text;
       //pega pelo demo.js ,que coloquei uma variavel global e natural tb
-      comecarTime();
+      //comecarTime();
+      limparTime();
+      recordbutton.click();
       askQuestion(baseString);
 
 
@@ -2563,6 +2565,7 @@ exports.initRecordButton = function(ctx) {
             console.log(msg);
             showError(msg);
             running = false;
+            isRun = false;
             localStorage.setItem('currentlyDisplaying', 'false');
           } else {
             recordButton.css('background-color', '#d74108');
@@ -2576,6 +2579,7 @@ exports.initRecordButton = function(ctx) {
             comecarTime();
             mic.record();
             running = true;
+            isRun = true;
           }
         });
       } else {
@@ -2586,6 +2590,7 @@ exports.initRecordButton = function(ctx) {
         $.publish('hardsocketstop');
         mic.stop();
         running = false;
+        isRun = false;
         localStorage.setItem('currentlyDisplaying', 'false');
       }
     };

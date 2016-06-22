@@ -7,7 +7,7 @@ var recordbutton = document.getElementById("recordButton");
 function comecarTime(){
     clearInterval(counter);
     
-    count=10;
+    count=100;
  
     counter=setInterval(timer, 1000);
   
