@@ -7,7 +7,7 @@ var recordbutton = document.getElementById("recordButton");
 function comecarTime(){
     clearInterval(counter);
     
-    count=100;
+    count=20;
  
     counter=setInterval(timer, 1000);
   
@@ -22,6 +22,7 @@ function timer()
      clearInterval(counter);
      converse("","nada");
      recordbutton.click();
+     readytoTalk = false;
      return;
   }
   console.log(count);

@@ -1946,9 +1946,7 @@ exports.showResult = function(msg, baseString, model) {
       }
       baseString = text;
       //pega pelo demo.js ,que coloquei uma variavel global e natural tb
-      //comecarTime();
-      limparTime();
-      recordbutton.click();
+      comecarTime();
       askQuestion(baseString);
 
 
@@ -2580,6 +2578,7 @@ exports.initRecordButton = function(ctx) {
             mic.record();
             running = true;
             isRun = true;
+            readytoTalk = true;
           }
         });
       } else {

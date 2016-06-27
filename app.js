@@ -34,8 +34,8 @@ require('./config/express')(app);
 
 var credentialsDialog =  extend({
   url: 'https://gateway.watsonplatform.net/dialog/api',
-  username: '71e64847-1ed0-4120-99a4-502f36f03e0f',
-  password: 'XH31gbujRzAi',
+  username: 'd8f9f3ed-11aa-45de-a3bf-bb7bb4ddeab1',
+  password: 'gFu8dWQlzTEd',
   version: 'v1'
 }, bluemix.getServiceCreds('dialog')); // VCAP_SERVICES
 
@@ -49,8 +49,8 @@ var credentialsDialog =  extend({
 var config = extend({
   version: 'v1',
   url: 'https://stream.watsonplatform.net/speech-to-text/api',
-  username: process.env.STT_USERNAME || '8b9cda7d-18e1-46a8-8129-988391d59a77',
-  password: process.env.STT_PASSWORD || '8es9PgTTLMqH'
+  username: process.env.STT_USERNAME || '09a47e00-d4b2-42b6-8154-4246a76b321e',
+  password: process.env.STT_PASSWORD || 'hb4AF0NH1tgH'
 }, vcapServices.getCredentials('speech_to_text'));
 
 var authService = watson.authorization(config);

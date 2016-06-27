@@ -116,6 +116,7 @@ $(document).ready(function () {
           addProperty($profile, par.name + ':', par.value);
           console.log(isRun);
             if(par.name == 'Curso' && isRun == true){
+              //readytoTalk = false;
               recordbutton.click();
             }
         }
