@@ -58,6 +58,7 @@ $(document).ready(function () {
 
     // check if there is a conversation in place and continue that
     // by specifing the conversation_id and client_id
+    
     if (conversation_id) {
       params.conversation_id = conversation_id;
       params.client_id = client_id;
@@ -108,16 +109,15 @@ $(document).ready(function () {
       conversation_id: conversation_id,
       client_id: client_id
     };
-
+    //colocando para parar o dialogo quando chega em curso!
     $.post('/profile', params).done(function(data) {
       $profile.empty();
       data.name_values.forEach(function(par) {
         if (par.value !== ''){
           addProperty($profile, par.name + ':', par.value);
-          console.log(isRun);
-            if(par.name == 'Curso' && isRun == true){
-              //readytoTalk = false;
-              recordbutton.click();
+            if(par.name == 'Curso' && isRun == false){
+              readytoTalk = false;
+              //recordbutton.click();
             }
         }
       });

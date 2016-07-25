@@ -13,7 +13,7 @@ function comecarTime(){
   
   }
 
-
+//so se usa aqui
 function timer()
 {
   count=count-1;

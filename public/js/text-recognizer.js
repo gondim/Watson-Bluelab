@@ -19,17 +19,17 @@ getSpeech = function(text){
 
 
     audio.play();
+    //quando ele recebe a fala,ela vai comeca a fala,logo eu desligo pra nao da buxo
     console.log("readytoTalk -> " + readytoTalk);
     if(isRun == true && readytoTalk == true)
     		recordbutton.click();
-
+    //quando termina de fala,o watson,ele liga pra ouvir a parada toda
     audio.onended = function() {
     	if(isRun == false && readytoTalk == true)
     		recordbutton.click();
 	};
 
 
-    //console.log("heuheuehuehuehueh " + audio.duration;
 }
 
 });
